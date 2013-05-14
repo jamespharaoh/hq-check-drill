@@ -1,4 +1,24 @@
+require "tempfile"
+
 require "hq/check-drill/script"
+
+When /^I execute$/ do
+	|cmd_str|
+
+	stdout_temp = Tempfile.new "cuke-stdout-"
+	stderr_temp = Tempfile.new "cuke-stderr-"
+
+	system "(#{cmd_str}) >#{stdout_temp.path} 2>#{stderr_temp.path}"
+
+	@command_status = $?.exitstatus
+
+	@command_stdout = File.read(stdout_temp.path)
+	@command_stderr = File.read(stderr_temp.path)
+
+	stdout_temp.unlink
+	stderr_temp.unlink
+
+end
 
 When /^I invoke check\-drill (.*?)$/ do
 	|args_str|
