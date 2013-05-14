@@ -43,7 +43,7 @@ class Script < Tools::CheckScript
 
 	def perform_checks
 
-		now = Time.now
+		now = Time.now.utc
 
 		@drill_elems.each do
 			|drill_elem|
@@ -52,7 +52,7 @@ class Script < Tools::CheckScript
 				|match_elem|
 
 				current = now.strftime match_elem["template"]
-				regex = Regexp.new match_elem["regex"]
+				regex = Regexp.new "^(?:#{match_elem["regex"]})$"
 
 				current =~ regex
 
